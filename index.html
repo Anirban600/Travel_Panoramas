@@ -1,0 +1,67 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="utf-8">
+  <title>Panorama Viewer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #111; color: #eee; }
+    h1 { padding: 1rem; margin: 0; }
+    .switcher { padding: 0 1rem 1rem; }
+    .switcher button {
+      padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer;
+      background: #444; color: #eee; border: 0; border-radius: 4px;
+    }
+    .switcher button.active { background: #06c; }
+    #panorama { width: 100%; height: 80vh; }
+  </style>
+  </head>
+  <body>
+  <h1>Panorama Viewer</h1>
+  <div class="switcher">
+    <button id="btn-uncropped" class="active">Uncropped (225° × 106°)</button>
+    <button id="btn-cropped">Cropped (173° × 76°)</button>
+  </div>
+  <div id="panorama"></div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+  <script>
+  const configs = {
+    uncropped: {
+      type: "equirectangular",
+      panorama: "https://github.com/Anirban600/Travel_Panoramas/blob/main/Ooty_panorama_uncropped_20MB.jpg",
+      haov: 225,   // horizontal FOV of the image
+      vaov: 106,   // vertical FOV of the image
+      vOffset: 0,  // vertical centering
+      autoLoad: true,
+      showZoomCtrl: true,
+      showFullscreenCtrl: true,
+      hfov: 100,   // initial viewing horizontal FOV
+    },
+    cropped: {
+      type: "equirectangular",
+      panorama: "https://github.com/Anirban600/Travel_Panoramas/blob/main/Ooty_panorama_cropped_20MB.jpg",
+      haov: 173.5,
+      vaov: 76.2,
+      vOffset: 0,
+      autoLoad: true,
+      showZoomCtrl: true,
+      showFullscreenCtrl: true,
+      hfov: 100,
+    }
+  };
+  
+  let viewer = pannellum.viewer("panorama", configs.uncropped);
+  
+  function switchTo(which) {
+    viewer.destroy();
+    viewer = pannellum.viewer("panorama", configs[which]);
+    document.querySelectorAll(".switcher button").forEach(b => b.classList.remove("active"));
+    document.getElementById("btn-" + which).classList.add("active");
+  }
+  
+  document.getElementById("btn-uncropped").addEventListener("click", () => switchTo("uncropped"));
+  document.getElementById("btn-cropped").addEventListener("click", () => switchTo("cropped"));
+  </script>
+  </body>
+  </html>
